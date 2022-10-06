@@ -1,25 +1,48 @@
 import styled from "styled-components";
 import React, { useEffect } from "react";
 import axios from 'axios';
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function TelaDeSessões() {
-    
+    const { idFilme } = useParams();
+    const [sessao, setSessao] = React.useState({});
+    const [horarios, setHorarios] = React.useState([]);
+
+    useEffect(() => {
+        const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`);
+
+        promise.then((resposta) => {
+            setSessao(resposta.data);
+            setHorarios(resposta.data.days);
+            console.log(resposta.data.days);
+        });
+
+        promise.catch((erro) => {
+            console.log(erro.response.data);
+        })
+    }, []);
+
     return (
         <Sessões>
             <h2>Selecione o horário</h2>
 
-            <Sessão>
-                <p>Quinta-feira - 24/06/2021</p>
-                <button><p>15:00</p></button>
-            </Sessão>
+            {horarios.map((h) =>
+                <Sessão key={h.id}>
+                    <p>{h.weekday} - {h.date}</p>
+                    <Link to={`/assentos/1`}>
+                        <button><p>15:00</p></button>
+                    </Link>
+                </Sessão>
+            )}
 
             <Info>
                 <ImagemDoFilme>
-                    <img src="https://image.tmdb.org/t/p/w500/7D430eqZj8y3oVkLFfsWXGRcpEG.jpg" alt="imagem do filme"></img>
+                    <img src={sessao.posterURL} alt={sessao.title}></img>
                 </ImagemDoFilme>
 
                 <NomeDoFilme>
-                    <p>2067</p>
+                    <p>{sessao.title}</p>
                 </NomeDoFilme>
             </Info>
         </Sessões>
@@ -36,7 +59,7 @@ const Sessões = styled.div`
         align-items: center;
         justify-content: center;
 
-        font-family: 'Roboto';
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 24px;
@@ -53,7 +76,7 @@ const Sessão = styled.div`
     margin-left:30px;
 
     p{
-        font-family: 'Roboto';
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 20px;
@@ -76,7 +99,7 @@ const Sessão = styled.div`
         cursor: pointer;
 
         p{
-        font-family: 'Roboto';
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 18px;
@@ -130,7 +153,7 @@ const ImagemDoFilme = styled.div`
 
 const NomeDoFilme = styled.div`
     p{
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 26px;

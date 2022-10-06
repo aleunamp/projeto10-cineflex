@@ -39,7 +39,7 @@ const Final = styled.div`
     margin-top: 107px;
 
     h2{
-        font-family: 'Roboto';
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 24px;
@@ -62,7 +62,7 @@ const FilmeSessão = styled.div`
     margin-left: 30px;
 
     h3{
-        font-family: 'Roboto';
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 24px;
@@ -132,7 +132,7 @@ const Comprador = styled.div`
     margin-left: 30px;
 
     h3{
-        font-family: 'Roboto';
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 24px;
@@ -182,7 +182,7 @@ const BotãoInicio = styled.div`
         cursor: pointer;
         
         p{
-            font-family: 'Roboto';
+            font-family: 'Roboto', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 18px;

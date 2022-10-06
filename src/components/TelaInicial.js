@@ -1,21 +1,21 @@
 import styled from "styled-components";
 import React, { useEffect } from "react";
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 export default function TelaIncial() {
     const [filmes, setFilmes] = React.useState([]);
 
     useEffect(() => {
-        const URL = "https://mock-api.driven.com.br/api/v8/cineflex/movies";
+        const URL = "https://mock-api.driven.com.br/api/v5/cineflex/movies";
         const promise = axios.get(URL);
 
         promise.then((resposta) => {
-            console.log(resposta.data);
             setFilmes(resposta.data);
         });
-    
-        promise.catch((erro) => { 
-            console.log(erro.response.data); 
+
+        promise.catch((erro) => {
+            console.log(erro.response.data);
         });
     }, []);
 
@@ -24,10 +24,13 @@ export default function TelaIncial() {
             <h2>Selecione o filme</h2>
 
             {filmes.map((f) =>
-                <Filme key ={f.id}>
-                    <img src={f.posterURL} alt={f.title}></img>
-                </Filme>
+                <Link to={`/sessoes/${f.id}`} key={f.id}>
+                    <Filme>
+                        <img src={f.posterURL} alt={f.title}></img>
+                    </Filme>
+                </Link>
             )}
+
 
         </Inicio>
     );
@@ -43,7 +46,7 @@ const Inicio = styled.div`
     justify-content: center;
 
     h2{
-        font-family: 'Roboto';
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 24px;

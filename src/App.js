@@ -18,8 +18,8 @@ export default function App() {
             <NavBar />
             <Routes>
                 <Route path="/" element={<TelaInicial />} />
-                <Route path="/sessao" element={<TelaDeSessões />} />
-                <Route path="/filme" element={<TelaDeAssentos />} />
+                <Route path="/sessoes/:idFilme" element={<TelaDeSessões />} />
+                <Route path="/assentos/:idSessao" element={<TelaDeAssentos />} />
                 <Route path="/sucesso" element={<TelaDeSucesso />} />
             </Routes>
         </BrowserRouter>
