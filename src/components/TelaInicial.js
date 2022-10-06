@@ -1,12 +1,34 @@
 import styled from "styled-components";
+import React, { useEffect } from "react";
+import axios from 'axios';
 
 export default function TelaIncial() {
+    const [filmes, setFilmes] = React.useState([]);
+
+    useEffect(() => {
+        const URL = "https://mock-api.driven.com.br/api/v8/cineflex/movies";
+        const promise = axios.get(URL);
+
+        promise.then((resposta) => {
+            console.log(resposta.data);
+            setFilmes(resposta.data);
+        });
+    
+        promise.catch((erro) => { 
+            console.log(erro.response.data); 
+        });
+    }, []);
+
     return (
         <Inicio>
             <h2>Selecione o filme</h2>
-            <Filme>
-                <img src="https://image.tmdb.org/t/p/w500/7D430eqZj8y3oVkLFfsWXGRcpEG.jpg" alt="imagem do filme"></img>
-            </Filme>
+
+            {filmes.map((f) =>
+                <Filme key ={f.id}>
+                    <img src={f.posterURL} alt={f.title}></img>
+                </Filme>
+            )}
+
         </Inicio>
     );
 }
@@ -15,11 +37,12 @@ const Inicio = styled.div`
     width: 375px;
     margin-top: 107px;
 
-    h2{
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 
+    h2{
         font-family: 'Roboto';
         font-style: normal;
         font-weight: 400;
@@ -30,7 +53,7 @@ const Inicio = styled.div`
 
         color: #293845;
 
-        margin-top: 40px;
+        margin-top: 20px;
     }
 `;
 

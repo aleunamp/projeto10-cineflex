@@ -1,6 +1,9 @@
 import styled from "styled-components";
+import React, { useEffect } from "react";
+import axios from 'axios';
 
 export default function TelaDeSessões() {
+    
     return (
         <Sessões>
             <h2>Selecione o horário</h2>

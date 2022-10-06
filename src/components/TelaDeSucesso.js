@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import React from "react";
+import { Link } from "react-router-dom";
 
 export default function TelaDeSucesso() {
     return (
@@ -23,9 +25,11 @@ export default function TelaDeSucesso() {
                 <p>CPF: 123.456.789-10</p>
             </Comprador>
 
-            <BotãoInicio>
-                <button><p>Voltar pra Home</p></button>
-            </BotãoInicio>
+            <Link to="/">
+                <BotãoInicio>
+                    <button><p>Voltar pra Home</p></button>
+                </BotãoInicio>
+            </Link>
         </Final>
     );
 }
