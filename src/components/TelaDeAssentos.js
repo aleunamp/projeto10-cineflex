@@ -4,20 +4,24 @@ import axios from 'axios';
 import { useParams } from "react-router-dom";
 import DadosDoCliente from "./DadosDoCliente";
 
-function ComponenteAssento({ id, name, isAvailable, assentosSelecionados, setAssentosSelecionados }) {
+function ComponenteAssento({ id, name, isAvailable, assentosSelecionados, setAssentosSelecionados, setNumAssentosSelecionados, NumAssentosSelecionados }) {
     const [clicado, setClicado] = React.useState("assento disponível");
     let arraySelecionados = [...assentosSelecionados];
+    let arrayNumSelecionados = [...NumAssentosSelecionados];
 
     function selecionarAssento(name, id) {
         if (clicado === "assento disponível") {
             setClicado("assento selecionado");
             arraySelecionados.push(id);
+            arrayNumSelecionados.push(name);
             setAssentosSelecionados(arraySelecionados);
+            setNumAssentosSelecionados(arrayNumSelecionados);
         }
 
         else if (clicado === "assento selecionado") {
             setClicado("assento disponível");
             arraySelecionados = arraySelecionados.filter((i) => i !== id);
+            arrayNumSelecionados = arrayNumSelecionados.filter((n) => n !== name);
             setAssentosSelecionados(arraySelecionados);
         }
     }
@@ -51,6 +55,7 @@ export default function TelaDeSessões() {
     const [dia, setDia] = React.useState({})
     const [assentos, setAssentos] = React.useState([]);
     const [assentosSelecionados, setAssentosSelecionados] = React.useState([]);
+    const [NumAssentosSelecionados, setNumAssentosSelecionados] = React.useState([]);
 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
@@ -78,6 +83,9 @@ export default function TelaDeSessões() {
                         id={a.id} isAvailable={a.isAvailable}
                         assentosSelecionados={assentosSelecionados}
                         setAssentosSelecionados={setAssentosSelecionados}
+                        setNumAssentosSelecionados={setNumAssentosSelecionados}
+                        NumAssentosSelecionados={NumAssentosSelecionados}
+
                     />
                 )}
             </Assento>
@@ -99,8 +107,12 @@ export default function TelaDeSessões() {
                 </Legenda>
             </LegendaAssentos>
 
-            <DadosDoCliente 
-            assentosSelecionados={assentosSelecionados}
+            <DadosDoCliente
+                assentosSelecionados={assentosSelecionados}
+                filme={filme.title}
+                dia={dia.weekday}
+                sessao={sessao.name}
+                NumAssentosSelecionados={NumAssentosSelecionados}
             />
 
             <Info>

@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import React, { useEffect } from "react";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { ScrollRestoration, useNavigate } from "react-router-dom";
 
-export default function DadosDoCliente({ assentosSelecionados }) {
+export default function DadosDoCliente({ assentosSelecionados, filme, dia, sessao, NumAssentosSelecionados }) {
     const [nome, setNome] = React.useState("");
     const [cpf, setCpf] = React.useState("");
     const navigate = useNavigate();
@@ -21,13 +21,28 @@ export default function DadosDoCliente({ assentosSelecionados }) {
 
         const promise = axios.post(URL, body);
 
-        promise.then(() => {
-            navigate("/sucesso")
-        });
+        if (NumAssentosSelecionados.length === 0) {
+            alert("É necessário selecionar os assentos para continuar!");
+        }
 
-        promise.catch((erro) => {
-            alert(erro.response.data.mensagem);
-        });
+        else if (NumAssentosSelecionados.length !== 0) {
+            promise.then(() => {
+                navigate("/sucesso", {
+                    state: {
+                        nome: nome,
+                        cpf: cpf,
+                        filme: filme,
+                        dia: dia,
+                        sessao: sessao,
+                        assentosNum: NumAssentosSelecionados
+                    }
+                })
+            });
+
+            promise.catch((erro) => {
+                alert(erro.response.data.mensagem);
+            });
+        }
     }
 
     return (
@@ -38,14 +53,16 @@ export default function DadosDoCliente({ assentosSelecionados }) {
                     type="text"
                     value={nome}
                     onChange={e => setNome(e.target.value)}
+                    required
                 ></input>
 
                 <p>CPF do comprador:</p>
                 <input
                     placeholder="Digite seu CPF..."
-                    type="text"
+                    type="number"
                     value={cpf}
                     onChange={e => setCpf(e.target.value)}
+                    required
                 ></input>
             </InputComprador>
 

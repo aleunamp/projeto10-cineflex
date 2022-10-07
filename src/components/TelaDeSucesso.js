@@ -1,35 +1,38 @@
 import styled from "styled-components";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 export default function TelaDeSucesso() {
+    const location = useLocation();
+    const navigate = useNavigate();
+
     return (
         <Final>
             <h2>Pedido feito com sucesso!</h2>
 
             <FilmeSessão>
                 <h3>Filme e sessão</h3>
-                <p>2067</p>
-                <p>24/06/2021 15:00</p>
+                <p>{location.state.filme}</p>
+                <p>{location.state.dia} - {location.state.sessao} </p>
             </FilmeSessão>
 
             <Ingressos>
                 <h3>Ingressos</h3>
-                <p>Assento 15</p>
-                <p>Assento 16</p>
+                {location.state.assentosNum.map((a, index) => (
+                    <p key={index}>Assento {a}</p>
+                ))}
+
             </Ingressos>
 
             <Comprador>
                 <h3>Comprador</h3>
-                <p>Nome: João da Silva Sauro</p>
-                <p>CPF: 123.456.789-10</p>
+                <p>Nome: {location.state.nome}</p>
+                <p>CPF: {location.state.cpf}</p>
             </Comprador>
 
-            <Link to="/">
-                <BotãoInicio>
-                    <button><p>Voltar pra Home</p></button>
-                </BotãoInicio>
-            </Link>
+            <BotãoInicio onClick={() => navigate("/")}>
+                <button><p>Voltar pra Home</p></button>
+            </BotãoInicio>
         </Final>
     );
 }
@@ -171,6 +174,7 @@ const BotãoInicio = styled.div`
         height: 42px;
 
         margin-top: 62px;
+        margin-bottom: 100px;
 
         display: flex;
         align-items: center;
@@ -196,4 +200,3 @@ const BotãoInicio = styled.div`
         }
     }
 `;
-
