@@ -7,15 +7,14 @@ import { Link } from "react-router-dom";
 export default function TelaDeSessões() {
     const { idFilme } = useParams();
     const [sessao, setSessao] = React.useState({});
-    const [horarios, setHorarios] = React.useState([]);
+    const [dias, setDias] = React.useState([]);
 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`);
 
         promise.then((resposta) => {
             setSessao(resposta.data);
-            setHorarios(resposta.data.days);
-            console.log(resposta.data.days);
+            setDias(resposta.data.days);
         });
 
         promise.catch((erro) => {
@@ -27,11 +26,14 @@ export default function TelaDeSessões() {
         <Sessões>
             <h2>Selecione o horário</h2>
 
-            {horarios.map((h) =>
-                <Sessão key={h.id}>
-                    <p>{h.weekday} - {h.date}</p>
-                    <Link to={`/assentos/1`}>
-                        <button><p>15:00</p></button>
+            {dias.map((d) =>
+                <Sessão key={d.id}>
+                    <p>{d.weekday} - {d.date}</p>
+                    <Link to={`/assentos/${d.showtimes[0].id}`}>
+                        <button><p>{d.showtimes[0].name}</p></button>
+                    </Link>
+                    <Link to={`/assentos/${d.showtimes[1].id}`}>
+                        <button><p>{d.showtimes[1].name}</p></button>
                     </Link>
                 </Sessão>
             )}
@@ -97,6 +99,8 @@ const Sessão = styled.div`
         border-radius: 5px;
 
         cursor: pointer;
+
+        margin-left: 8px;
 
         p{
         font-family: 'Roboto', sans-serif;
