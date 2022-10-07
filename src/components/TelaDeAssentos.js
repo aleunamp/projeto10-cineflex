@@ -8,16 +8,16 @@ function ComponenteAssento({ id, name, isAvailable, assentosSelecionados, setAss
     const [clicado, setClicado] = React.useState("assento disponível");
     let arraySelecionados = [...assentosSelecionados];
 
-    function selecionarAssento(name) {
+    function selecionarAssento(name, id) {
         if (clicado === "assento disponível") {
             setClicado("assento selecionado");
-            arraySelecionados.push(name);
+            arraySelecionados.push(id);
             setAssentosSelecionados(arraySelecionados);
         }
 
         else if (clicado === "assento selecionado") {
             setClicado("assento disponível");
-            arraySelecionados = arraySelecionados.filter((n) => n !== name);
+            arraySelecionados = arraySelecionados.filter((i) => i !== id);
             setAssentosSelecionados(arraySelecionados);
         }
     }
@@ -32,13 +32,13 @@ function ComponenteAssento({ id, name, isAvailable, assentosSelecionados, setAss
 
         if (clicado === "assento disponível") {
             return (
-                <BotaoAssento onClick={() => selecionarAssento(name)}
+                <BotaoAssento onClick={() => selecionarAssento(name, id)}
                     cor="#C3CFD9" key={id}><p>{name}</p></BotaoAssento >);
         }
 
         else if (clicado === "assento selecionado") {
             return (
-                <BotaoAssento onClick={() => selecionarAssento(name)}
+                <BotaoAssento onClick={() => selecionarAssento(name, id)}
                     cor="#1AAE9E" key={id}><p>{name}</p></BotaoAssento >);
         }
     }
@@ -99,7 +99,9 @@ export default function TelaDeSessões() {
                 </Legenda>
             </LegendaAssentos>
 
-            <DadosDoCliente />
+            <DadosDoCliente 
+            assentosSelecionados={assentosSelecionados}
+            />
 
             <Info>
                 <ImagemDoFilme>

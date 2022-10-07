@@ -1,28 +1,58 @@
 import styled from "styled-components";
 import React, { useEffect } from "react";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
-export default function DadosDoCliente() {
+export default function DadosDoCliente({ assentosSelecionados }) {
+    const [nome, setNome] = React.useState("");
+    const [cpf, setCpf] = React.useState("");
+    const navigate = useNavigate();
 
-    function reservarAssento() {
-        console.log("funcionou");
+    function reservarAssento(e) {
+        e.preventDefault();
+
+        const URL = "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many";
+
+        const body = {
+            ids: assentosSelecionados,
+            name: nome,
+            cpf: cpf
+        };
+
+        const promise = axios.post(URL, body);
+
+        promise.then(() => {
+            navigate("/sucesso")
+        });
+
+        promise.catch((erro) => {
+            alert(erro.response.data.mensagem);
+        });
     }
 
     return (
-        <>
+        <form onSubmit={reservarAssento}>
             <InputComprador>
                 <p>Nome do comprador:</p>
-                <input placeholder="Digite seu nome..."></input>
+                <input placeholder="Digite seu nome..."
+                    type="text"
+                    value={nome}
+                    onChange={e => setNome(e.target.value)}
+                ></input>
 
                 <p>CPF do comprador:</p>
-                <input placeholder="Digite seu CPF..."></input>
+                <input
+                    placeholder="Digite seu CPF..."
+                    type="text"
+                    value={cpf}
+                    onChange={e => setCpf(e.target.value)}
+                ></input>
             </InputComprador>
 
-
-            <BotãoReserva onClick={reservarAssento}>
+            <BotãoReserva type="submit">
                 <button><p>Reservar assentos(s)</p></button>
             </BotãoReserva>
-        </>
+        </form>
     )
 };
 
@@ -30,6 +60,8 @@ const BotãoReserva = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    margin-bottom: 150px;
 
     button{
         width: 225px;
