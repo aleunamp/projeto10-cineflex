@@ -4,17 +4,17 @@ import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-export default function TelaDeSessões() {
-    const { idFilme } = useParams();
-    const [sessao, setSessao] = React.useState({});
-    const [dias, setDias] = React.useState([]);
+export default function SessionScreen() {
+    const { movieId } = useParams();
+    const [session, setSession] = React.useState({});
+    const [days, setDays] = React.useState([]);
 
     useEffect(() => {
-        const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`);
+        const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${movieId}/showtimes`);
 
         promise.then((resposta) => {
-            setSessao(resposta.data);
-            setDias(resposta.data.days);
+            setSession(resposta.data);
+            setDays(resposta.data.days);
         });
 
         promise.catch((erro) => {
@@ -26,7 +26,7 @@ export default function TelaDeSessões() {
         <Sessões>
             <h2>Selecione o horário</h2>
 
-            {dias.map((d) =>
+            {days.map((d) =>
                 <Sessão key={d.id}>
                     <p>{d.weekday} - {d.date}</p>
                     <Link to={`/assentos/${d.showtimes[0].id}`}>
@@ -40,11 +40,11 @@ export default function TelaDeSessões() {
 
             <Info>
                 <ImagemDoFilme>
-                    <img src={sessao.posterURL} alt={sessao.title}></img>
+                    <img src={session.posterURL} alt={session.title}></img>
                 </ImagemDoFilme>
 
                 <NomeDoFilme>
-                    <p>{sessao.title}</p>
+                    <p>{session.title}</p>
                 </NomeDoFilme>
             </Info>
         </Sessões>

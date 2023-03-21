@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import React from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function TelaDeSucesso() {
+export default function SucessScreen() {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -12,21 +12,20 @@ export default function TelaDeSucesso() {
 
             <FilmeSessão>
                 <h3>Filme e sessão</h3>
-                <p>{location.state.filme}</p>
-                <p>{location.state.dia} - {location.state.sessao} </p>
+                <p>{location.state.movie}</p>
+                <p>{location.state.day} - {location.state.session} </p>
             </FilmeSessão>
 
             <Ingressos>
                 <h3>Ingressos</h3>
-                {location.state.assentosNum.map((a, index) => (
-                    <p key={index}>Assento {a}</p>
+                {location.state.numberSeat.map((n, index) => (
+                    <p key={index}>Assento {n}</p>
                 ))}
-
             </Ingressos>
 
             <Comprador>
                 <h3>Comprador</h3>
-                <p>Nome: {location.state.nome}</p>
+                <p>Nome: {location.state.name}</p>
                 <p>CPF: {location.state.cpf}</p>
             </Comprador>
 

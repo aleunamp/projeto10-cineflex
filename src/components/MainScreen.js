@@ -3,15 +3,15 @@ import React, { useEffect } from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
-export default function TelaIncial() {
-    const [filmes, setFilmes] = React.useState([]);
+export default function MainScreen() {
+    const [movies, setMovies] = React.useState([]);
 
     useEffect(() => {
         const URL = "https://mock-api.driven.com.br/api/v5/cineflex/movies";
         const promise = axios.get(URL);
 
         promise.then((resposta) => {
-            setFilmes(resposta.data);
+            setMovies(resposta.data);
         });
 
         promise.catch((erro) => {
@@ -23,15 +23,13 @@ export default function TelaIncial() {
         <Inicio>
             <h2>Selecione o filme</h2>
 
-            {filmes.map((f) =>
-                <Link to={`/sessoes/${f.id}`} key={f.id}>
+            {movies.map((movie) =>
+                <Link to={`/sessoes/${movie.id}`} key={movie.id}>
                     <Filme>
-                        <img src={f.posterURL} alt={f.title}></img>
+                        <img src={movie.posterURL} alt={movie.title}></img>
                     </Filme>
                 </Link>
             )}
-
-
         </Inicio>
     );
 }

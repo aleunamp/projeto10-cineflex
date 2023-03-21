@@ -1,40 +1,38 @@
 import styled from "styled-components";
-import React, { useEffect } from "react";
+import React from "react";
 import axios from 'axios';
-import { ScrollRestoration, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function DadosDoCliente({ assentosSelecionados, filme, dia, sessao, NumAssentosSelecionados }) {
-    const [nome, setNome] = React.useState("");
+export default function ClientInfo({ selectedSeat, movie, day, session, numberSelect }) {
+    const [name, setName] = React.useState("");
     const [cpf, setCpf] = React.useState("");
     const navigate = useNavigate();
 
-    function reservarAssento(e) {
+    function bookSeat(e) {
         e.preventDefault();
 
         const URL = "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many";
 
         const body = {
-            ids: assentosSelecionados,
-            name: nome,
+            ids: selectedSeat,
+            name: name,
             cpf: cpf
         };
 
         const promise = axios.post(URL, body);
 
-        if (NumAssentosSelecionados.length === 0) {
+        if (numberSelect.length === 0) {
             alert("É necessário selecionar os assentos para continuar!");
-        }
-
-        else if (NumAssentosSelecionados.length !== 0) {
+        } else if (numberSelect.length !== 0) {
             promise.then(() => {
                 navigate("/sucesso", {
                     state: {
-                        nome: nome,
+                        name: name,
                         cpf: cpf,
-                        filme: filme,
-                        dia: dia,
-                        sessao: sessao,
-                        assentosNum: NumAssentosSelecionados
+                        movie: movie,
+                        day: day,
+                        session: session,
+                        numberSeat: numberSelect
                     }
                 })
             });
@@ -46,13 +44,13 @@ export default function DadosDoCliente({ assentosSelecionados, filme, dia, sessa
     }
 
     return (
-        <form onSubmit={reservarAssento}>
+        <form onSubmit={bookSeat}>
             <InputComprador>
                 <p>Nome do comprador:</p>
                 <input placeholder="Digite seu nome..."
                     type="text"
-                    value={nome}
-                    onChange={e => setNome(e.target.value)}
+                    value={name}
+                    onChange={e => setName(e.target.value)}
                     required
                 ></input>
 

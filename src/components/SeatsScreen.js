@@ -2,27 +2,26 @@ import styled from "styled-components";
 import React, { useEffect } from "react";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
-import DadosDoCliente from "./DadosDoCliente";
+import ClientInfo from "./ClientInfo.js";
 
-function ComponenteAssento({ id, name, isAvailable, assentosSelecionados, setAssentosSelecionados, setNumAssentosSelecionados, NumAssentosSelecionados }) {
-    const [clicado, setClicado] = React.useState("assento disponível");
-    let arraySelecionados = [...assentosSelecionados];
-    let arrayNumSelecionados = [...NumAssentosSelecionados];
+function SeatComponent({ id, name, isAvailable, selectedSeat, setSelectedSeat, setNumberSelect, numberSelect }) {
+    const [click, setClick] = React.useState("assento disponível");
+    let selectedArray = [...selectedSeat];
+    let numberArray = [...numberSelect];
 
-    function selecionarAssento(name, id) {
-        if (clicado === "assento disponível") {
-            setClicado("assento selecionado");
-            arraySelecionados.push(id);
-            arrayNumSelecionados.push(name);
-            setAssentosSelecionados(arraySelecionados);
-            setNumAssentosSelecionados(arrayNumSelecionados);
-        }
-
-        else if (clicado === "assento selecionado") {
-            setClicado("assento disponível");
-            arraySelecionados = arraySelecionados.filter((i) => i !== id);
-            arrayNumSelecionados = arrayNumSelecionados.filter((n) => n !== name);
-            setAssentosSelecionados(arraySelecionados);
+    function selectSeat(name, id) {
+        if (click === "assento disponível") {
+            setClick("assento selecionado");
+            selectedArray.push(id);
+            numberArray.push(name);
+            setSelectedSeat(selectedArray);
+            setNumberSelect(numberArray);
+        } else if (click === "assento selecionado") {
+            setClick("assento disponível");
+            selectedArray = selectedArray.filter((i) => i !== id);
+            numberArray = numberArray.filter((n) => n !== name);
+            setNumberSelect(numberArray);
+            setSelectedSeat(selectedArray);
         }
     }
 
@@ -33,38 +32,35 @@ function ComponenteAssento({ id, name, isAvailable, assentosSelecionados, setAss
     }
 
     else if (isAvailable === true) {
-
-        if (clicado === "assento disponível") {
+        if (click === "assento disponível") {
             return (
-                <BotaoAssento onClick={() => selecionarAssento(name, id)}
+                <BotaoAssento onClick={() => selectSeat(name, id)}
                     cor="#C3CFD9" key={id}><p>{name}</p></BotaoAssento >);
-        }
-
-        else if (clicado === "assento selecionado") {
+        } else if (click === "assento selecionado") {
             return (
-                <BotaoAssento onClick={() => selecionarAssento(name, id)}
+                <BotaoAssento onClick={() => selectSeat(name, id)}
                     cor="#1AAE9E" key={id}><p>{name}</p></BotaoAssento >);
         }
     }
 }
 
-export default function TelaDeSessões() {
-    const { idSessao } = useParams();
-    const [filme, setFilme] = React.useState({});
-    const [sessao, setSessao] = React.useState({});
-    const [dia, setDia] = React.useState({})
-    const [assentos, setAssentos] = React.useState([]);
-    const [assentosSelecionados, setAssentosSelecionados] = React.useState([]);
-    const [NumAssentosSelecionados, setNumAssentosSelecionados] = React.useState([]);
+export default function SeatsScreen() {
+    const { sessionId } = useParams();
+    const [movie, setMovie] = React.useState({});
+    const [session, setSession] = React.useState({});
+    const [day, setDay] = React.useState({})
+    const [seats, setSeats] = React.useState([]);
+    const [selectedSeat, setSelectedSeat] = React.useState([]);
+    const [numberSelect, setNumberSelect] = React.useState([]);
 
     useEffect(() => {
-        const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
+        const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${sessionId}/seats`);
 
         promise.then((resposta) => {
-            setFilme(resposta.data.movie);
-            setSessao(resposta.data);
-            setDia(resposta.data.day);
-            setAssentos(resposta.data.seats);
+            setMovie(resposta.data.movie);
+            setSession(resposta.data);
+            setDay(resposta.data.day);
+            setSeats(resposta.data.seats);
         });
 
         promise.catch((erro) => {
@@ -77,15 +73,14 @@ export default function TelaDeSessões() {
             <h2>Selecione o(s) assentos(s)</h2>
 
             <Assento>
-                {assentos.map((a) =>
-                    <ComponenteAssento
-                        name={a.name} key={a.id}
-                        id={a.id} isAvailable={a.isAvailable}
-                        assentosSelecionados={assentosSelecionados}
-                        setAssentosSelecionados={setAssentosSelecionados}
-                        setNumAssentosSelecionados={setNumAssentosSelecionados}
-                        NumAssentosSelecionados={NumAssentosSelecionados}
-
+                {seats.map((s) =>
+                    <SeatComponent
+                        name={s.name} key={s.id}
+                        id={s.id} isAvailable={s.isAvailable}
+                        selectedSeat={selectedSeat}
+                        setSelectedSeat={setSelectedSeat}
+                        setNumberSelect={setNumberSelect}
+                        numberSelect={numberSelect}
                     />
                 )}
             </Assento>
@@ -107,22 +102,22 @@ export default function TelaDeSessões() {
                 </Legenda>
             </LegendaAssentos>
 
-            <DadosDoCliente
-                assentosSelecionados={assentosSelecionados}
-                filme={filme.title}
-                dia={dia.weekday}
-                sessao={sessao.name}
-                NumAssentosSelecionados={NumAssentosSelecionados}
+            <ClientInfo
+                selectedSeat={selectedSeat}
+                movie={movie.title}
+                day={day.weekday}
+                session={session.name}
+                numberSelect={numberSelect}
             />
 
             <Info>
                 <ImagemDoFilme>
-                    <img src={filme.posterURL} alt={filme.title}></img>
+                    <img src={movie.posterURL} alt={movie.title}></img>
                 </ImagemDoFilme>
 
                 <NomeDoFilme>
-                    <p>{filme.title}</p>
-                    <p>{dia.weekday} - {sessao.name}</p>
+                    <p>{movie.title}</p>
+                    <p>{day.weekday} - {session.name}</p>
                 </NomeDoFilme>
             </Info>
         </Assentos>
